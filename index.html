@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <title>Deep Cut</title>
+  <meta name="description" content="Mini golf where obscure answers hit harder. Name a fish: salmon taps the ball, sarcastic fringehead sinks a hole in one.">
+  <meta name="theme-color" content="#a9ddf1">
+  <meta property="og:title" content="Deep Cut — mini golf for know-it-alls">
+  <meta property="og:description" content="Name a fish. Salmon taps the ball. Sarcastic fringehead sinks it. A new course every day.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2346b35f'/%3E%3Ccircle cx='32' cy='40' r='9' fill='%2313281c'/%3E%3Cpath d='M32 40V10' stroke='%23fff' stroke-width='3'/%3E%3Cpath d='M32 10l18 6-18 7z' fill='%23ee3d33'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Lilita+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <header class="top">
+      <h1 class="wordmark">Deep Cut</h1>
+      <div class="holeinfo">
+        <span class="hole-num" id="holeNum">Hole 1 of 9</span>
+        <span class="hole-name" id="holeName">First Cut</span>
+      </div>
+      <div class="tally">
+        <div class="tally-cell"><span class="tally-val" id="par">3</span><span class="tally-key">par</span></div>
+        <div class="tally-cell"><span class="tally-val" id="strokes">0</span><span class="tally-key">strokes</span></div>
+      </div>
+
+    </header>
+
+    <main class="stage" id="stage">
+      <div class="stage-actions">
+        <button class="icon-btn" id="muteBtn" type="button" aria-label="Mute sound" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path class="wave" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="cross" d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <button class="icon-btn" id="helpBtn" type="button" aria-label="How to play">?</button>
+      </div>
+      <canvas id="course" aria-label="Mini golf course. Drag to aim." role="img"></canvas>
+      <div class="aimpad" aria-label="Fine aim">
+        <button class="aim-btn" id="aimLeft" type="button" aria-label="Rotate aim left">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12a6 6 0 1 0 2-4.5M7 4v4h4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="aim-btn" id="aimRight" type="button" aria-label="Rotate aim right">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 12a6 6 0 1 1-2-4.5M17 4v4h-4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </main>
+
+    <section class="panel" id="panel" aria-live="polite">
+      <div class="timer" aria-hidden="true"><div class="timer-bar" id="timerBar"></div></div>
+      <div class="ask" id="askView">
+        <p class="prompt" id="prompt">Name a fish</p>
+        <form class="answer-row" id="answerForm" autocomplete="off">
+          <label class="sr-only" for="answer">Your answer</label>
+          <input id="answer" name="answer" type="text" inputmode="text" enterkeyhint="go" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="60" placeholder="Type an answer">
+          <button class="swing" id="swingBtn" type="submit">Swing</button>
+        </form>
+        <p class="hint" id="hint">Drag on the course to aim. The numbered dots show where each obscurity level stops.</p>
+      </div>
+      <div class="reveal" id="revealView" hidden>
+        <div class="reveal-head">
+          <p class="reveal-answer" id="revealAnswer"></p>
+          <p class="reveal-tier"><span id="revealTier">7</span><small>/10</small></p>
+        </div>
+        <div class="meter" id="meter" aria-hidden="true"></div>
+        <p class="verdict" id="verdict"></p>
+      </div>
+    </section>
+  </div>
+
+  <dialog class="sheet" id="introDialog">
+    <h2 class="sheet-title">Deep Cut</h2>
+    <p class="lead">Mini golf where your general knowledge is the club.</p>
+    <ol class="steps">
+      <li><strong>Aim.</strong> Drag on the course.</li>
+      <li><strong>Answer.</strong> Common answers tap the ball. Obscure answers send it.</li>
+      <li><strong>Read the line.</strong> The numbered dots show where each obscurity level, 1 to 10, would stop. Name something exactly that obscure.</li>
+    </ol>
+    <div class="example">
+      <p class="example-q">Name a fish</p>
+      <ul class="example-list">
+        <li><span>salmon</span><b style="--c: var(--t1)">1</b></li>
+        <li><span>barracuda</span><b style="--c: var(--t3)">3</b></li>
+        <li><span>anglerfish</span><b style="--c: var(--t7)">7</b></li>
+        <li><span>sarcastic fringehead</span><b style="--c: var(--t10)">10</b></li>
+      </ul>
+    </div>
+    <p class="fine">A hole in one needs a 10. Everyone gets the same course and the same questions each day.</p>
+    <button class="primary" id="startBtn" type="button">Tee off</button>
+  </dialog>
+
+  <dialog class="sheet" id="holeDialog">
+    <p class="score-name" id="scoreName">Birdie!</p>
+    <p class="score-line" id="scoreLine">2 strokes on a par 3</p>
+    <p class="score-best" id="scoreBest"></p>
+    <button class="primary" id="nextHoleBtn" type="button">Next hole</button>
+  </dialog>
+
+  <dialog class="sheet wide" id="finalDialog">
+    <p class="final-kicker" id="finalKicker">Deep Cut #1</p>
+    <p class="final-total"><span id="finalTotal">30</span> <small id="finalRel">E</small></p>
+    <div class="card-grid" id="scorecard"></div>
+    <p class="deepest" id="deepest"></p>
+    <details class="answers">
+      <summary>Your answers</summary>
+      <ul id="answerList"></ul>
+    </details>
+    <div class="final-actions">
+      <button class="primary" id="shareBtn" type="button">Share result</button>
+      <button class="secondary" id="practiceBtn" type="button">Play a practice round</button>
+    </div>
+    <p class="next-course" id="nextCourse"></p>
+  </dialog>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
