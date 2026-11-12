@@ -9,7 +9,7 @@ import { sfx, unlockAudio, isMuted, setMuted } from './sound.js';
 
 const MAX_STROKES = 8;
 const ANSWER_SECONDS = 40;
-const SITE_URL = 'https://whysush.github.io/deepcut/';
+const SITE_URL = 'https://whysush.in/';
 const TIER_LABEL = ['', 'First thing anyone says', 'Very common', 'Common', 'Well known', 'Middle of the road', 'Uncommon', 'Niche', 'Deep cut', 'Specialist', 'Legendary'];
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

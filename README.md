@@ -1,6 +1,6 @@
 # Deep Cut ⛳
 
-**Mini golf where obscure answers hit harder.** Play it: **https://whysush.github.io/deepcut/**
+**Mini golf where obscure answers hit harder.** Play it: **https://whysush.in**
 
 Every stroke asks a question: *Name a fish.* Your answer's obscurity sets the power of the shot.
 `salmon` barely taps the ball. `anglerfish` sends it. `sarcastic fringehead` can sink a hole in one.
